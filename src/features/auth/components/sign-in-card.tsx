@@ -1,8 +1,10 @@
+"use client"
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
-import { Dispatch, FC, SetStateAction } from "react";
+import { Dispatch, FC, SetStateAction, useState } from "react";
 import { FaGithub } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { SingInFlow } from "../types";
@@ -13,6 +15,8 @@ interface SignInCardProps {
 
 const SignInCard: FC<SignInCardProps> = (props) => {
   const { setState } = props;
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
 
   return (
     <Card
@@ -36,16 +40,16 @@ const SignInCard: FC<SignInCardProps> = (props) => {
         >
           <Input
             disabled={false}
-            value={""}
-            onChange={() => {}}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             placeholder="Email"
             type="email"
             required
           />
           <Input
             disabled={false}
-            value={""}
-            onChange={() => {}}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
             placeholder="Password"
             type="password"
             required
