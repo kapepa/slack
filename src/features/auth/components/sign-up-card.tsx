@@ -1,4 +1,6 @@
-import { Dispatch, FC, SetStateAction } from "react";
+"use client"
+
+import { Dispatch, FC, SetStateAction, useState } from "react";
 import { SingInFlow } from "../types";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -13,6 +15,9 @@ interface SignUpCardProps {
 
 const SignUpCard: FC<SignUpCardProps> = (props) => {
   const { setState } = props;
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [confirm, setConfirm] = useState<string>("");
 
   return (
     <Card
@@ -36,24 +41,24 @@ const SignUpCard: FC<SignUpCardProps> = (props) => {
         >
           <Input
             disabled={false}
-            value={""}
-            onChange={() => {}}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             placeholder="Email"
             type="email"
             required
           />
           <Input
             disabled={false}
-            value={""}
-            onChange={() => {}}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
             placeholder="Password"
             type="password"
             required
           />
           <Input
             disabled={false}
-            value={""}
-            onChange={() => {}}
+            value={confirm}
+            onChange={(e) => setConfirm(e.target.value)}
             placeholder="Confirm password"
             type="confirm"
             required
