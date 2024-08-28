@@ -4,10 +4,12 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
-import { Dispatch, FC, SetStateAction, useState } from "react";
+import { Dispatch, FC, FormEvent, SetStateAction, useState, useTransition } from "react";
 import { FaGithub } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
-import { SingInFlow } from "../types";
+import { ProvidersValue, SingInFlow } from "../types";
+import { useAuthActions } from "@convex-dev/auth/react";
+import { TriangleAlert } from "lucide-react";
 
 interface SignInCardProps {
   setState: Dispatch<SetStateAction<SingInFlow>>
@@ -15,8 +17,30 @@ interface SignInCardProps {
 
 const SignInCard: FC<SignInCardProps> = (props) => {
   const { setState } = props;
+  const { signIn } = useAuthActions();
+  const [error, setError] = useState<string>()
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [isPending, startTransition] = useTransition()
+
+  const onProviderSignIn = (value: ProvidersValue) => {
+    startTransition(async() => {
+      await signIn(value);
+    })
+  }
+
+  const onPasswordSignIn = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    startTransition(async () => {
+      const formData = new FormData(e.currentTarget);
+      // await signIn("password", formData).catch((e) => {
+      //   setError("Invalid email or password");
+      // });
+      signIn("password", {email, password, flow: "signIn"}).catch((e) => {
+        setError("Invalid email or password");
+      });
+    })
+  }
 
   return (
     <Card
@@ -28,37 +52,55 @@ const SignInCard: FC<SignInCardProps> = (props) => {
         <CardTitle>
           Login to continue
         </CardTitle>
+        <CardDescription>
+          Use your email or another service to continue
+        </CardDescription>
       </CardHeader>
-      <CardDescription>
-        Use your email or another service to continue
-      </CardDescription>
+      {
+        !!error
+        && (
+          <div
+            className="bg-destructive/15 p-3 rounded-md flex items-center gap-2 text-sm text-destructive mb-6"
+          >
+            <TriangleAlert
+              className="size-4"
+            />
+            <p>
+              { error }
+            </p>
+          </div>
+        )
+      }
       <CardContent
         className="space-y-5 px-0 pb-0"
       >
         <form
           className="space-y-2.5"
+          onSubmit={onPasswordSignIn}
         >
           <Input
-            disabled={false}
+            disabled={isPending}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="Email"
             type="email"
+            name="email"
             required
           />
           <Input
-            disabled={false}
+            disabled={isPending}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="Password"
             type="password"
+            name="password"
             required
           />
           <Button
             type="submit"
             className="w-full"
             size="lg"
-            disabled={false}
+            disabled={isPending}
           >
             Continue
           </Button>
@@ -68,8 +110,8 @@ const SignInCard: FC<SignInCardProps> = (props) => {
           className="flex flex-col gap-y-2.5"
         >
           <Button
-            disabled={false}
-            onClick={() => {}}
+            disabled={isPending}
+            onClick={onProviderSignIn.bind(null, "google")}
             variant="outline"
             className="w-full relative"
           >
@@ -79,8 +121,8 @@ const SignInCard: FC<SignInCardProps> = (props) => {
             Continue with Google
           </Button>
           <Button
-            disabled={false}
-            onClick={() => {}}
+            disabled={isPending}
+            onClick={onProviderSignIn.bind(null, "github")}
             variant="outline"
             className="w-full relative"
           >
