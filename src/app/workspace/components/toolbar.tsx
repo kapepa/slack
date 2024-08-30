@@ -1,11 +1,16 @@
 import { Button } from "@/components/ui/button";
-import { Search } from "lucide-react";
+import { useGetWorkspace } from "@/features/workspaces/api/use-get-workspace";
+import { useWorkspaceId } from "@/hooks/use-workspace-id";
+import { Info, Search } from "lucide-react";
 import { FC } from "react";
 
 const Toolbar: FC = () => {
+  const workspaceId = useWorkspaceId();
+  const { data } = useGetWorkspace({ id: workspaceId });
+
   return (
     <nav
-      className="bg-[#481349] items-center justify-between h-10 p-1.5"
+      className="bg-[#481349] flex items-center justify-between h-10 p-1.5"
     >
       <div
         className="flex-1"
@@ -23,8 +28,20 @@ const Toolbar: FC = () => {
           <span
             className="text-white text-xs"
           >
-            Search workspace
+            Search {data?.name}
           </span>
+        </Button>
+      </div>
+      <div
+        className="ml-auto flex-1 flex items-center justify-end"
+      >
+        <Button
+          variant="transparent"
+          size="iconSm"
+        >
+          <Info
+            className="size-5 text-white"
+          />
         </Button>
       </div>
     </nav>
