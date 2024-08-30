@@ -16,7 +16,7 @@ export const current = query({
       .withIndex("by_workspace_id_user_id", (q) => 
         q.eq("workspacesId", args.workspacesId).eq("userId", userId)
       )
-      .collect();
+      .unique();
 
     if (!member) return null;
 

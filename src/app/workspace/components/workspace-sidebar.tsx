@@ -43,7 +43,10 @@ const WorkspaceSidebar: FC = () => {
     <div
       className="flex flex-col bg-[#5E2C5F] h-full"
     >
-      <WorkspaceHeader/>
+      <WorkspaceHeader
+        workspace={dataWorkspace}
+        isAdmin={dataMember.role === "admin"}
+      />
     </div>
   )
 };
