@@ -10,7 +10,7 @@ interface UseConfirmProps {
 }
 
 type UseConfirmReturn = [
-  () => JSX.Element, () => Promise<unknown>
+  () => JSX.Element, () => Promise<unknown>,
 ]
 
 interface PromiseState {
