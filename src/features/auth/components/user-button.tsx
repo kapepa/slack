@@ -33,11 +33,12 @@ const UserButton: FC = () => {
         className="outline-none relative"
       >
         <Avatar
-          className="size-10 hover:opacity-75 transition"
+          className="rounded-md size-10 hover:opacity-75 transition"
         >
           <AvatarImage
             src={image}
             alt={name}
+            className="rounded-md"
           />
           <AvatarFallback
             className="bg-sky-500 text-white"
