@@ -9,6 +9,7 @@ import { useGetChannels } from "@/features/channels/api/use-get-channels";
 import { WorkspaceSection } from "./workspace-section";
 import { useGetMembers } from "@/features/members/api/use-get-members";
 import { UserItem } from "./user-item";
+import { useCreateChannelModal } from "@/features/channels/store/use-create-channel-modal";
 
 const WorkspaceSidebar: FC = () => {
   const workspaceId = useWorkspaceId();
@@ -16,6 +17,8 @@ const WorkspaceSidebar: FC = () => {
   const { data: dataWorkspace, isLoading: loadingWorkspace } = useGetWorkspace({ id: workspaceId });
   const { data: dataChannels, isLoading: loadingChannels } = useGetChannels({ workspaceId });
   const { data: dataMembers, isLoading: loadingMembers } = useGetMembers({ workspaceId });
+
+  const [open, setOpen] = useCreateChannelModal();
 
   if (loadingMember || loadingWorkspace) {
     return (
@@ -71,7 +74,7 @@ const WorkspaceSidebar: FC = () => {
       <WorkspaceSection
         label="Channels"
         hint="New channel"
-        onNew={() => {}}
+        onNew={dataMember.role === "admin" ? () => setOpen(true) : undefined}
       >
         {
           !!dataChannels && dataChannels?.map((item) => (
