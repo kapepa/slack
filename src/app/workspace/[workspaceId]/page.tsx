@@ -24,7 +24,7 @@ const WorkspaceIdPage: NextPage = () => {
   const isAdmin = useMemo(() => member?.role === "admin", [member?.role]);
 
   useEffect(() => {
-    if (workspaceLoading || channelsLoading || memberLoading || member || !channels) return;
+    if (workspaceLoading || channelsLoading || memberLoading || !member || !workspace) return;
 
     if(channelId) {
       router.push(`${Router.Workspaces}/${workspaceId}${Router.Channel}/${channelId}`);

@@ -4,6 +4,7 @@ import { useGetChannel } from "@/features/channels/api/use-get-channel";
 import { useChannelId } from "@/hooks/use-channel-id";
 import { Loader, TriangleAlert } from "lucide-react";
 import { NextPage } from "next";
+import { Header } from "./components/header";
 
 const ChannelIdPage: NextPage = () => {
   const channelId = useChannelId();
@@ -21,7 +22,7 @@ const ChannelIdPage: NextPage = () => {
     )
   }
 
-  if (channeLoading) {
+  if (!channe) {
     return (
       <div
          className="h-full flex-1 flex items-center justify-center flex-col gap-y-2"
@@ -38,11 +39,14 @@ const ChannelIdPage: NextPage = () => {
     )
   }
 
+
   return (
     <div
-      className=""
+      className="flex flex-col h-full"
     >
-
+      <Header
+        title={channe.name}
+      />
     </div>
   )
 }
