@@ -28,7 +28,31 @@ export const create = mutation({
       workspacesId: args.workspaceId,
     });
 
-    
+    return channelId
+  }
+})
+
+export const getById = query({
+  args: {
+    id: v.id("channels"),
+  },
+  handler: async (ctx, args) => { 
+    const userId = await auth.getUserId(ctx);
+    if (!userId) return null;
+
+    const channel = await ctx.db.get(args.id);
+    if (!channel) return null;
+
+    const member = await ctx.db
+      .query("members")
+      .withIndex("by_workspace_id_user_id", (q) => 
+        q.eq("workspacesId", channel.workspacesId).eq("userId", userId),
+      )
+      .unique();
+
+    if (!member) return null;
+
+    return channel;
   }
 })
 

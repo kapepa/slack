@@ -5,11 +5,69 @@ import { auth } from "./auth";
 const generateCode = () => {
   const code = Array.from(
     { length: 6 },
-    () => "0123456789abcdefghijklmnopqrstuvwxyz"[Math.floor(Math.random() * 36)],
-  ).join();
+    () => "0123456789abcdefghijklmnopqrstuvwxyz"[Math.floor(Math.random() * 36)]
+  ).join("");
 
   return code;
 }
+
+export const join = mutation({
+  args: {
+    joinCode: v.string(),
+    workspacesId: v.id("workspaces"),
+  },
+  handler: async (ctx, args) => {
+    const userId = await auth.getUserId(ctx);
+    if (!userId) throw new Error("Unauthorized");
+
+    const workspace = await ctx.db.get(args.workspacesId);
+    if (!workspace) throw new Error("Workspace not found");
+    if (workspace.joinCode !== args.joinCode.toLowerCase()) throw new Error("Invalid join code");
+
+    const memeber = await ctx.db
+      .query("members")
+      .withIndex(
+        "by_workspace_id_user_id", 
+        (q) => q.eq("workspacesId", args.workspacesId).eq("userId", userId),
+      )
+      .unique();
+    if (memeber) throw new Error("Already a member of this workspace");
+    
+    await ctx.db.insert("members", {
+      userId,
+      workspacesId: workspace._id,
+      role: "member",
+    })
+
+    return workspace._id;
+  }
+})
+
+export const newJoinCode = mutation({
+  args: {
+    workspacesId: v.id("workspaces"),
+  },
+  handler: async (ctx, args) => {
+    const userId = await auth.getUserId(ctx);
+    if (!userId) throw new Error("Unauthorized");
+
+    const member = await ctx.db
+      .query("members")
+      .withIndex("by_workspace_id_user_id", (q) => 
+        q.eq("workspacesId", args.workspacesId).eq("userId", userId)
+      )
+      .unique();
+
+    if (!member || member.role !== "admin") {
+      throw new Error("Unauthorized");
+    }
+
+    const joinCode = generateCode();
+    await ctx.db.patch(args.workspacesId, { joinCode });
+
+    return args.workspacesId;
+  }
+})
 
 export const create = mutation ({
   args: {
@@ -68,11 +126,33 @@ export const get = query({
   }
 })
 
+export const getinfobyId = query({
+  args: { id: v.id("workspaces") },
+  async handler(ctx, args) {
+    const userId = await auth.getUserId(ctx);
+    if (!userId) return null;
+
+    const memeber = await ctx.db
+      .query("members")
+      .withIndex(
+        "by_workspace_id_user_id", 
+        (q) => q.eq("workspacesId", args.id).eq("userId", userId),
+      )
+      .unique();
+
+    const workspace = await ctx.db.get(args.id);
+
+    return {
+      name: workspace?.name,
+      isMember: !!memeber,
+    }
+  },
+})
+
 export const getById = query({
   args: { id: v.id("workspaces") },
   async handler(ctx, args) {
     const userId = await auth.getUserId(ctx);
-
     if (!userId) throw new Error("Unauthorized");
 
     const memeber = await ctx.db
