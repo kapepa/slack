@@ -107,7 +107,7 @@ const Editor: FC<EditorProps> = forwardRef((props) => {
     const toolbarElement = containerRef.current?.querySelector(".ql-toolbar");
 
     if (toolbarElement) toolbarElement.classList.toggle("hidden");
-  }
+  };
 
   return (
     <div
