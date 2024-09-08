@@ -10,6 +10,7 @@ import { ImageIcon, Keyboard, Smile } from "lucide-react";
 import { Hint } from "./hint";
 import { Delta, Op } from "quill/core";
 import { cn } from "@/lib/utils";
+import { EmojiPopover } from "./emoji-popover";
 
 type EditorValue = {
   image: File | null;
@@ -88,9 +89,9 @@ const Editor: FC<EditorProps> = forwardRef((props) => {
     quill.setContents(defaultValueRef.current);
     setText(quill.getText());
 
-    quill.on(Quill.events.TEXT_CHANGE), () => {
+    quill.on(Quill.events.TEXT_CHANGE, () => {
       setText(quill.getText());
-    }
+    })
 
     return () => {
       quill.off(Quill.events.TEXT_CHANGE);
@@ -108,6 +109,12 @@ const Editor: FC<EditorProps> = forwardRef((props) => {
 
     if (toolbarElement) toolbarElement.classList.toggle("hidden");
   };
+
+  const onEmojiSelect = (emoji: any) => {
+    const quill = quilrRef.current;
+
+    quill?.insertText(quill?.getSelection()?.index || 0, emoji.native);
+  }
 
   return (
     <div
@@ -137,20 +144,19 @@ const Editor: FC<EditorProps> = forwardRef((props) => {
               />
             </Button>
           </Hint>
-          <Hint
-            label="Emoji"
+          <EmojiPopover
+            onEmojiSelect={onEmojiSelect}
           >
             <Button
               disabled={disabled}
               size="iconSm"
               variant="ghost"
-              onClick={() => {}}
             >
               <Smile
                 className="size-4"
               />
             </Button>
-          </Hint>
+          </EmojiPopover>
           {
             variant === "create"
             && (
@@ -215,16 +221,25 @@ const Editor: FC<EditorProps> = forwardRef((props) => {
           }
         </div>
       </div>
-      <div
-        className="p-2 text-[10px] text-muted-foreground flex justify-end"
-      >
-        <p>
-          <strong>
-            Shift + Return
-          </strong>
-          to add a new line
-        </p>
-      </div>
+      {
+        variant === "create"
+        && (
+          <div
+            className={cn(
+              "p-2 text-[10px] text-muted-foreground flex justify-end opacity-0 transition",
+              !isEmpty && "opacity-100",
+            )}
+          >
+            <p>
+              <strong>
+                Shift + Return
+              </strong>
+              to add a new line
+            </p>
+          </div>
+        )
+      }
+
     </div>
   )
 });
