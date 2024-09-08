@@ -28,6 +28,7 @@ const ChatInput: FC<ChatInputProps> = (props) => {
         placeholder={placeholder}
         disabled={false}
         innerRef={editorRef}
+        onSubmit={() => {}}
       />
     </div>
   )
