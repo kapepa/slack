@@ -69,6 +69,14 @@ const Editor: FC<EditorProps> = forwardRef((props) => {
             enter: {
               key: "Enter",
               handler: () => {
+                const text = quill.getText();
+                const addedImage = imagElementeRef.current?.files?.[0] || null;
+                const isEmpty = !addedImage && text.replace(/<(.|\n)*?>/g, "").trim().length === 0;
+                if (isEmpty) return;
+
+                const body = JSON.stringify(quill.getContents());
+                submitRef.current?.({body, image});
+
                 return 
               }
             },
@@ -104,7 +112,7 @@ const Editor: FC<EditorProps> = forwardRef((props) => {
     }
   }, []);
 
-  const isEmpty = text.replace(/<(.|\n)*?>/g, "").trim().length === 0;
+  const isEmpty = !image && text.replace(/<(.|\n)*?>/g, "").trim().length === 0;
 
   const toogleToolbar = () => {
     setIsToolbarVisible((current) => !current);
@@ -131,7 +139,10 @@ const Editor: FC<EditorProps> = forwardRef((props) => {
         className="hidden"
       />
       <div
-        className="flex flex-col border border-slate-200 rounded-md overflow-hidden focus-within:border-slate-200 focus-within:shadow-sm transition bg-white"
+        className={cn(
+          "flex flex-col border border-slate-200 rounded-md overflow-hidden focus-within:border-slate-200 focus-within:shadow-sm transition bg-white",
+          disabled && "opacity-50"
+        )}
       >
         <div
           ref={containerRef}
@@ -229,14 +240,19 @@ const Editor: FC<EditorProps> = forwardRef((props) => {
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={() => {}}
+                  onClick={onCancel}
                   disabled={disabled}
                 >
                   Cnacel
                 </Button>
                 <Button
                   size="sm"
-                  onClick={() => {}}
+                  onClick={() => {
+                    onSubmit({
+                      body: JSON.stringify(quilrRef.current?.getContents()),
+                      image,
+                    })
+                  }}
                   className="ml-auto bg-[#007a5a] hover:bg-[#007a5a]/80 text-white"
                   disabled={disabled || isEmpty}
                 >
@@ -257,7 +273,12 @@ const Editor: FC<EditorProps> = forwardRef((props) => {
                     ? " bg-white hover:bg-white text-muted-foreground"
                     : " bg-[#007a5a] hover:bg-[#007a5a]/80 text-w",
                 )}
-                onClick={() => {}}
+                onClick={() => {
+                  onSubmit({
+                    body: JSON.stringify(quilrRef.current?.getContents()),
+                    image,
+                  })
+                }}
               >
                 <MdSend/>
               </Button>
