@@ -11,6 +11,7 @@ type ReqType = {
   workspacesId: Id<"workspaces">,
   channelsId?: Id<"channels">,
   parentMessageId?: Id<"messages">;
+  conversationsId?: Id<"conversations">,
 };
 
 type ResType = Id<"messages"> | null;

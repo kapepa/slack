@@ -6,12 +6,15 @@ import { Loader, TriangleAlert } from "lucide-react";
 import { NextPage } from "next";
 import { Header } from "./components/header";
 import { ChatInput } from "./components/chat-input";
+import { useGetMessages } from "@/features/messages/api/use-get-messages";
+import { MesssageList } from "@/components/messsage-list";
 
 const ChannelIdPage: NextPage = () => {
-  const channelId = useChannelId();
-  const { data: channe, isLoading: channeLoading } = useGetChannel({ id: channelId });
+  const channelsId = useChannelId();
+  const { results, status, loadMore } = useGetMessages({ channelsId });
+  const { data: channe, isLoading: channeLoading } = useGetChannel({ id: channelsId });
 
-  if (channeLoading) {
+  if (channeLoading || status === "LoadingFirstPage") {
     return (
       <div
          className="h-full flex-1 flex items-center justify-center gap-2"
@@ -40,7 +43,6 @@ const ChannelIdPage: NextPage = () => {
     )
   }
 
-
   return (
     <div
       className="flex flex-col h-full"
@@ -48,8 +50,13 @@ const ChannelIdPage: NextPage = () => {
       <Header
         title={channe.name}
       />
-      <div
-        className="flex-1"
+      <MesssageList
+        channelName={channe.name}
+        channeCreationTime={channe._creationTime}
+        data={results}
+        loadMore={loadMore}
+        isLoadingMore={status === "LoadingMore"}
+        canLoadMore={status === "CanLoadMore"}
       />
       <ChatInput
         placeholder={`Message # ${channe.name}`}
