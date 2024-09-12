@@ -7,7 +7,7 @@ import { NextPage } from "next";
 import { Header } from "./components/header";
 import { ChatInput } from "./components/chat-input";
 import { useGetMessages } from "@/features/messages/api/use-get-messages";
-import { MesssageList } from "@/components/messsage-list";
+import { MessageList } from "@/components/message-list";
 
 const ChannelIdPage: NextPage = () => {
   const channelsId = useChannelId();
@@ -50,7 +50,7 @@ const ChannelIdPage: NextPage = () => {
       <Header
         title={channe.name}
       />
-      <MesssageList
+      <MessageList
         channelName={channe.name}
         channeCreationTime={channe._creationTime}
         data={results}

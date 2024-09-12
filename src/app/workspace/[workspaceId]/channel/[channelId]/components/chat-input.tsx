@@ -6,7 +6,7 @@ import { useChannelId } from '@/hooks/use-channel-id';
 import { useWorkspaceId } from '@/hooks/use-workspace-id';
 // import { Editor } from "@/components/editor";
 import dynamic from 'next/dynamic';
-import Quill from 'quill';
+import Quill from "quill";
 import { FC, useRef, useState } from "react";
 import { toast } from 'sonner';
 import { Id } from '../../../../../../../convex/_generated/dataModel';
