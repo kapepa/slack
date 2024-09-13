@@ -47,6 +47,7 @@ const Toolbar: FC<ToolbarProps> = (props) => {
                 variant="ghost"
                 size="iconSm"
                 disabled={isPeneding}
+                onClick={handleThread}
               >
                 <MessageSquareTextIcon
                   className="size-4"
@@ -64,6 +65,7 @@ const Toolbar: FC<ToolbarProps> = (props) => {
                 variant="ghost"
                 size="iconSm"
                 disabled={isPeneding}
+                onClick={handleEdit}
               >
                 <Pencil
                   className="size-4"
@@ -81,6 +83,7 @@ const Toolbar: FC<ToolbarProps> = (props) => {
                 variant="ghost"
                 size="iconSm"
                 disabled={isPeneding}
+                onClick={handleDelete}
               >
                 <Trash
                   className="size-4"
