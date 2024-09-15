@@ -5,6 +5,7 @@ import { useMemberlId } from "@/hooks/use-member-id";
 import { useGetMessages } from "@/features/messages/api/use-get-messages";
 import { Loader } from "lucide-react";
 import { Header } from "./header";
+import { ChatInput } from "./chat-input";
 
 
 interface ConversationProps {
@@ -36,8 +37,12 @@ const Conversation: FC<ConversationProps> = (props) => {
     >
       <Header
         onClick={() => {}}
-        memberName=""
-        memberIamge=""
+        memberName={member?.user.name}
+        memberIamge={member?.user.image}
+      />
+      <ChatInput
+        conversationsId={id}
+        placeholder={`Message ${member?.user.name}`}
       />
     </div>
   )

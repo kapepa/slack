@@ -1,7 +1,9 @@
 "use client"
 
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import React, { FC } from "react";
+import { FaChevronDown } from "react-icons/fa";
 
 interface HeaderProps {
   memberName?: string,
@@ -23,7 +25,22 @@ const Header: FC<HeaderProps> = (props) => {
         onClick={onClick}
         className="text-lg font-semibold px-2 overflow-hidden w-auto"
       >
-        
+        <Avatar>
+          <AvatarImage
+            src={memberIamge}
+          />
+          <AvatarFallback>
+            {avatarFallback}
+          </AvatarFallback>
+        </Avatar>
+        <span
+          className="truncate"
+        >
+          {memberIamge}
+        </span>
+        <FaChevronDown
+          className="size-2.5 ml-2"
+        />
       </Button>
     </div>
   )
