@@ -6,6 +6,7 @@ import { useGetMessages } from "@/features/messages/api/use-get-messages";
 import { Loader } from "lucide-react";
 import { Header } from "./header";
 import { ChatInput } from "./chat-input";
+import { MessageList } from "@/components/message-list";
 
 
 interface ConversationProps {
@@ -39,6 +40,15 @@ const Conversation: FC<ConversationProps> = (props) => {
         onClick={() => {}}
         memberName={member?.user.name}
         memberIamge={member?.user.image}
+      />
+      <MessageList
+        data={results}
+        variant="conversation"
+        loadMore={loadMore}
+        memberName={member?.user.name}
+        memberImage={member?.user.image}
+        canLoadMore={status === "CanLoadMore"}
+        isLoadingMore={status === "LoadingMore"}
       />
       <ChatInput
         conversationsId={id}
