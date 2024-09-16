@@ -14,6 +14,7 @@ import { useConfirm } from "@/hooks/use-confirm";
 import { useToggleReactions } from "@/features/reactions/api/use-toggle-reactions";
 import { Reactions } from "./reactions";
 import { usePanel } from "@/hooks/use-panel";
+import { ThreadBar } from "./thread-bar";
 
 const Renderer = dynamic(() => import("./renderer").then((m) => m.Renderer), { ssr: false });
 const Editor = dynamic(() => import("./editor").then( m => m.Editor), { ssr: false });
@@ -161,6 +162,11 @@ const Message: FC<MessageProps> = (props) => {
                     data={reactions}
                     onChange={handleReactions}
                   />
+                  <ThreadBar
+                    count={threadCount}
+                    image={threadImage}
+                    timestamp={threadTimestamp}
+                  />
                 </div>
               )
             }
@@ -269,6 +275,11 @@ const Message: FC<MessageProps> = (props) => {
                 <Reactions
                   data={reactions}
                   onChange={handleReactions}
+                />
+                <ThreadBar
+                  count={threadCount}
+                  image={threadImage}
+                  timestamp={threadTimestamp}
                 />
               </div>
             )
