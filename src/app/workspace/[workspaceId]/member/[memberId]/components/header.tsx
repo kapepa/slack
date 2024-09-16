@@ -34,9 +34,9 @@ const Header: FC<HeaderProps> = (props) => {
           </AvatarFallback>
         </Avatar>
         <span
-          className="truncate"
+          className="truncate ml-4"
         >
-          {memberIamge}
+          {memberName}
         </span>
         <FaChevronDown
           className="size-2.5 ml-2"
