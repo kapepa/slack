@@ -253,6 +253,7 @@ const Thread: FC<ThreadProps> = (props) => {
                     setEditingId={setEditingId}
                     isCompact={isCompact}
                     hideThreadButton
+                    threadName={message.threadName}
                     threadCount={message.threadCount}
                     threadImage={message.threadImage}
                     threadTimestamp={message.threadtimestamp}

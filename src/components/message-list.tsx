@@ -89,6 +89,7 @@ const MessageList: FC<MessageListProps> = (props) => {
                   setEditingId={setEditingId}
                   isCompact={isCompact}
                   hideThreadButton={variant === "thread"}
+                  threadName={message.threadName}
                   threadCount={message.threadCount}
                   threadImage={message.threadImage}
                   threadTimestamp={message.threadtimestamp}
