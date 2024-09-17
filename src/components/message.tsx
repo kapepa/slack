@@ -14,6 +14,7 @@ import { useConfirm } from "@/hooks/use-confirm";
 import { useToggleReactions } from "@/features/reactions/api/use-toggle-reactions";
 import { Reactions } from "./reactions";
 import { usePanel } from "@/hooks/use-panel";
+import { ThreadBar } from "./thread-bar";
 
 const Renderer = dynamic(() => import("./renderer").then((m) => m.Renderer), { ssr: false });
 const Editor = dynamic(() => import("./editor").then( m => m.Editor), { ssr: false });
@@ -38,6 +39,7 @@ interface MessageProps {
   isCompact?: boolean,
   setEditingId: (id: Id<"messages"> | null) => void,
   hideThreadButton?: boolean,
+  threadName?: string,
   threadCount?: number,
   threadImage?: string,
   threadTimestamp?: number,
@@ -48,18 +50,18 @@ const formatFullTime = (data: Date) => {
 }
 
 const Message: FC<MessageProps> = (props) => {
-  const { id, body, image, createAt, isAuthor, updateAt, memberId, isCompact, isEditing, reactions, authorName = "Member", threadImage, threadCount, authorImage, setEditingId, threadTimestamp, hideThreadButton } = props;
+  const { id, body, image, createAt, isAuthor, updateAt, memberId, isCompact, isEditing, reactions, authorName = "Member", threadName, threadImage, threadCount, authorImage, setEditingId, threadTimestamp, hideThreadButton } = props;
   const { mutate: updateMessage, isPending: isUpdateMessage } = useUpdateMessage();
   const { mutate: removeMessage, isPending: isRemoveMessage } = useRemoveMessage();
   const { mutate: toggleReactions, isPending: isToggleReactions } = useToggleReactions();
 
-  const { parentMessageId, onOpenMessage, onClose } = usePanel();
+  const { parentMessageId, onOpenMessage, onOpenProfile, onClose } = usePanel();
   const [ConfirmDialog, confirm] = useConfirm({
     title: "Delete message",
     message: "Are you sure you want to delete this message? This cannot be undone.",
   })
 
-  const isPending = isUpdateMessage;
+  const isPending = isUpdateMessage || isToggleReactions;
 
   const handleReactions = (value: string) => {
     toggleReactions(
@@ -161,6 +163,13 @@ const Message: FC<MessageProps> = (props) => {
                     data={reactions}
                     onChange={handleReactions}
                   />
+                  <ThreadBar
+                    name={threadName}
+                    count={threadCount}
+                    image={threadImage}
+                    timestamp={threadTimestamp}
+                    onClick={() => onOpenMessage(id)}
+                  />
                 </div>
               )
             }
@@ -198,7 +207,9 @@ const Message: FC<MessageProps> = (props) => {
         <div
           className="flex items-start gap-2"
         >
-          <button>
+          <button
+            onClick={() => onOpenProfile(memberId)}
+          >
             <Avatar>
               <AvatarImage
                 src={authorImage}
@@ -269,6 +280,13 @@ const Message: FC<MessageProps> = (props) => {
                 <Reactions
                   data={reactions}
                   onChange={handleReactions}
+                />
+                <ThreadBar
+                  name={threadName}
+                  count={threadCount}
+                  image={threadImage}
+                  timestamp={threadTimestamp}
+                  onClick={() => onOpenMessage(id)}
                 />
               </div>
             )
