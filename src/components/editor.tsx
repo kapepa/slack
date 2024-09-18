@@ -121,10 +121,10 @@ const Editor: FC<EditorProps> = forwardRef((props) => {
     if (toolbarElement) toolbarElement.classList.toggle("hidden");
   };
 
-  const onEmojiSelect = (emoji: any) => {
+  const onEmojiSelect = (emojiVal: string) => {
     const quill = quilrRef.current;
 
-    quill?.insertText(quill?.getSelection()?.index || 0, emoji.native);
+    quill?.insertText(quill?.getSelection()?.index || 0, emojiVal);
   }
 
   return (

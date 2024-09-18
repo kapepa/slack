@@ -57,7 +57,7 @@ const WorkspaceIdLayout: FC<WorkspaceLayoutProps> = (props) => {
                 />
                 <ResizablePanel
                   maxSize={20}
-                  defaultSize={29}
+                  defaultSize={80}
                 >
                   {
                     parentMessageId 
