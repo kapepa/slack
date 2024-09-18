@@ -135,7 +135,7 @@ const SignInCard: FC<SignInCardProps> = (props) => {
         <p
           className="text-xs text-muted-foreground"
         >
-          Don't have an account? &nbsp;
+          Don&apos;t have an account? &nbsp;
           <span
             className="text-sky-700 hover:underline cursor-pointer"
             onClick={() => setState("singUp")}
