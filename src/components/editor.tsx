@@ -110,7 +110,7 @@ const Editor: FC<EditorProps> = forwardRef((props) => {
       if (quilrRef) quilrRef.current = null;
       if (innerRef) innerRef.current = null;
     }
-  }, []);
+  }, [image, innerRef]);
 
   const isEmpty = !image && text.replace(/<(.|\n)*?>/g, "").trim().length === 0;
 

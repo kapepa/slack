@@ -22,7 +22,7 @@ export default function Home() {
     } else if (!open) {
       setOpen(true)
     }
-  }, [isLoading, workspacesId, setOpen, router])
+  }, [isLoading, workspacesId, open, setOpen, router])
 
   return (
     <div>
