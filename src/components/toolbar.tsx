@@ -26,7 +26,7 @@ const Toolbar: FC<ToolbarProps> = (props) => {
       >
         <EmojiPopover
           hint="Add reaction"
-          onEmojiSelect={(emoji) => handleReaction(emoji.native)}
+          onEmojiSelect={(emoji) => handleReaction(emoji)}
         >
           <Button
             variant="ghost"

@@ -23,6 +23,15 @@ export const remove = mutation({
 
     await ctx.db.delete(args.id);
 
+    const [messages] = await Promise.all([
+      ctx.db
+        .query("messages")
+        .withIndex("by_channe_id", (q) => q.eq("channelsId", args.id))
+        .collect(),  
+    ])
+
+    for (const message of messages) await ctx.db.delete(message._id);
+
     return args.id;
   }
 })
